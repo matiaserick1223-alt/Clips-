@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: kaiclip-studio-movil
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_PIN
+        generateValue: true
+      - key: MAX_UPLOAD_MB
+        value: 250
+      - key: CLIP_TTL_HOURS
+        value: 3

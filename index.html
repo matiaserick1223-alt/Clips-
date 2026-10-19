@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0e18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Convierte tus videos autorizados en clips verticales para TikTok, desde el celular.">
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <link rel="stylesheet" href="/static/styles.css">
+  <title>KaiClip Studio · Móvil</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon">▶</span><span>KAI<span class="brand-accent">CLIP</span><small>STUDIO</small></span></div>
+      <div class="top-badge"><span class="pulse"></span> MOBILE EDITION</div>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-top"><span class="eyebrow">TU ESTUDIO DE CLIPS CON IA</span><span class="sparkles">✦ ✦</span></div>
+        <h1 id="hero-title">Momentos grandes.<br><em>Clips brutales.</em></h1>
+        <p>De un video largo a clips verticales listos para TikTok, desde tu celular.</p>
+        <div class="pill-row"><span>✂️ Auto clips</span><span>▣ Formato 9:16</span><span>📱 Desde el móvil</span></div>
+        <div class="hero-circle circle-one"></div><div class="hero-circle circle-two"></div>
+      </section>
+
+      <div class="section-heading"><span class="number">01</span><div><h2>Tu video</h2><p>Selecciona un archivo desde Fotos o Archivos.</p></div></div>
+      <section class="surface upload-surface">
+        <input id="videoInput" type="file" accept="video/mp4,video/quicktime,video/x-matroska,video/webm,.avi,.mkv" hidden>
+        <button id="pickVideo" class="upload-zone" type="button">
+          <div class="upload-icon">↑</div><strong id="fileHeading">Toca para subir un video</strong>
+          <span id="fileDesc">MP4, MOV, MKV, WEBM · Máx. 250 MB</span>
+          <span class="ghost-button">Elegir video <span aria-hidden="true">›</span></span>
+        </button>
+        <div id="selectedFile" class="selected-file hidden"><span aria-hidden="true">🎞</span><div><strong id="selectedName"></strong><small id="selectedSize"></small></div><button type="button" id="clearVideo" aria-label="Cambiar video">✕</button></div>
+      </section>
+
+      <div class="section-heading"><span class="number">02</span><div><h2>Personaliza tus clips</h2><p>Tú eliges el estilo. El programa hace los cortes.</p></div></div>
+      <section class="surface settings">
+        <div class="field-heading"><label for="clipCount">Cantidad de clips</label><output for="clipCount" id="clipCountVal">4 clips</output></div>
+        <input id="clipCount" type="range" min="1" max="8" value="4"><div class="range-scale"><span>1 clip</span><span>8 clips</span></div>
+        <div class="hairline"></div>
+        <div class="field-heading"><label for="clipDuration">Duración de cada clip</label><output for="clipDuration" id="clipDurationVal">30 s</output></div>
+        <input id="clipDuration" type="range" min="10" max="90" step="5" value="30"><div class="range-scale"><span>10 s</span><span>90 s</span></div>
+        <div class="hairline"></div>
+        <div class="field-heading"><span>Formato vertical</span></div>
+        <div class="choice-group" role="radiogroup" aria-label="Formato del video">
+          <label class="choice"><input type="radio" name="framing" value="blur" checked><span><b>▣</b><strong>Fondo difuminado</strong><small>No corta la escena</small></span></label>
+          <label class="choice"><input type="radio" name="framing" value="crop"><span><b>◫</b><strong>Recorte al centro</strong><small>Llena la pantalla</small></span></label>
+        </div>
+        <div class="hairline"></div>
+        <div class="toggle-row"><div><strong>Subtítulos automáticos</strong><small id="subtitleHelp">Requiere modelo de transcripción en el servidor</small></div><label class="switch"><input id="subtitles" type="checkbox"><span class="switch-ui"></span></label></div>
+        <div class="language-row" id="languageRow"><label for="language">Idioma del video</label><select id="language"><option value="en">Inglés</option><option value="es">Español</option><option value="Auto">Detectar idioma</option></select></div>
+      </section>
+
+      <section class="consent"><label><input type="checkbox" id="authorized"><span>Confirmo que tengo permiso o derechos para usar y publicar este contenido.</span></label></section>
+      <div id="pinField" class="surface pin-box hidden"><label for="pin">PIN del servidor</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Escribe el PIN configurado en Render"></div>
+      <button id="generate" class="primary-btn" type="button">✦ Generar clips automáticos <span>→</span></button>
+      <p class="helper-text">La detección automática busca picos y cambios de audio. Revisa cada clip antes de publicar.</p>
+
+      <section id="progressSection" class="surface progress-box hidden" aria-live="polite"><div class="progress-head"><div class="spinner"></div><div><h3 id="progressTitle">Preparando tu video...</h3><p id="progressText">Estamos creando tus clips.</p></div></div><div class="progress-bar"><div id="progressFill"></div></div><span id="uploadPct" class="progress-stat"></span></section>
+      <section id="errorSection" class="error-box hidden" role="alert"></section>
+      <section id="resultsSection" class="hidden"><div class="section-heading"><span class="number">03</span><div><h2>Clips listos <span class="checkmark">✓</span></h2><p>Descarga o compártelos en tu celular.</p></div></div><div id="warnings" class="warnings"></div><div id="clipsList" class="clip-list"></div><a id="allDownload" class="secondary-btn" href="#" download>↓ Descargar todos los clips (.ZIP)</a><p class="helper-text">"Compartir" abre las opciones del teléfono; no publica automáticamente en TikTok.</p></section>
+      <section class="how-it-works"><h3>Así funciona</h3><div class="steps"><div><b>1</b><span>Sube un video</span></div><div><b>2</b><span>Detectamos momentos intensos</span></div><div><b>3</b><span>Te entregamos MP4 verticales</span></div></div></section>
+    </main>
+    <footer>KAICLIP STUDIO · No afiliado a Kai Cenat ni a TikTok.<br>Los videos se guardan temporalmente en el servidor.</footer>
+  </div>
+  <template id="clipTemplate"><article class="clip-card"><div class="clip-card-top"><span class="clip-index">CLIP 01</span><span class="clip-time"></span></div><video playsinline preload="metadata" controls></video><div class="clip-meta"><span class="from-time"></span><span>9:16 · MP4</span></div><label class="caption-label">Texto sugerido para TikTok</label><div class="caption-box"></div><div class="clip-actions"><a class="download-btn" download>↓ Descargar</a><button class="share-btn" type="button">↗ Compartir</button></div><button class="copy-btn" type="button">Copiar descripción</button></article></template>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
